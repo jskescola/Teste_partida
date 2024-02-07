@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termômetro</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+
+    .container {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .termometro-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 20px; /* Espaçamento à esquerda e à direita */
+    }
+
+    .termometro {
+        position: relative;
+        width: 30px;
+        height: 300px;
+        background-color: #ddd;
+        border-radius: 15px;
+        border: 2px solid #999;
+        overflow: hidden;
+    }
+
+    .nivel {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 0;
+        background-color: #18188F;
+        border-bottom-right-radius: 15px;
+        transition: height 0.5s ease-in-out;
+    }
+
+    .porcentagem {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    input[type="checkbox"], input[type="number"] {
+        margin-bottom: 10px;
+    }
+	
+	.div3 {
+	display: flex; /* Define o layout como flexível */
+        flex-wrap: nowrap; /* Impede que os itens quebrem para a próxima linha */
+		}
+</style>
+</head>
+<body>
+
+<h2>Análise de Entrada</h2>
+
+<div class="container">
+    <div class="termometro-container">
+        <form id="formulario1">
+            <input type="checkbox" id="posse-bola1" onchange="atualizarTermometro(1)"> <label for="posse-bola1">Posse de Bola Ofensiva (+25%)</label><br>
+            <input type="checkbox" id="chutao1" onchange="atualizarTermometro(1)"> <label for="chutao1">Chutão (-10%)</label><br>
+            <label for="faltas1">Faltas (-0,5% cada):</label> <input type="number" id="faltas1" min="0" onchange="atualizarTermometro(1)"><br>
+            <input type="checkbox" id="pressao1" onchange="atualizarTermometro(1)"> <label for="pressao1">Pressão (+10%)</label><br>
+            <input type="checkbox" id="qualidade-jogo1" onchange="atualizarTermometro(1)"> <label for="qualidade-jogo1">Qualidade do Jogo (+10%)</label><br>
+            <input type="checkbox" id="cera1" onchange="atualizarTermometro(1)"> <label for="cera1">Cera (-15%)</label><br>
+            <label for="faltas-violentas1">Faltas Violentas (-2% cada):</label> <input type="number" id="faltas-violentas1" min="0" onchange="atualizarTermometro(1)"><br>
+            <label for="finalizacoes-perigosas1">Finalizações Perigosas (+8% cada):</label> <input type="number" id="finalizacoes-perigosas1" min="0" onchange="atualizarTermometro(1)"><br>
+            <label for="finalizacoes-ruins1">Finalizações Ruins (+0,5% cada):</label> <input type="number" id="finalizacoes-ruins1" min="0" onchange="atualizarTermometro(1)"><br>
+            <label for="finalizacoes-normais1">Finalizações Normais (+1% cada):</label> <input type="number" id="finalizacoes-normais1" min="0" onchange="atualizarTermometro(1)"><br>
+        </form>
+
+        <div class="termometro" id="termometro1">
+            <div class="nivel" style="height: 0;"></div>
+        </div>
+        <div class="porcentagem" id="porcentagem1">0%</div>
+    </div>
+
+    <div class="termometro-container">
+        <form id="formulario2">
+            <input type="checkbox" id="posse-bola2" onchange="atualizarTermometro(2)"> <label for="posse-bola2">Posse de Bola Ofensiva (+25%)</label><br>
+            <input type="checkbox" id="chutao2" onchange="atualizarTermometro(2)"> <label for="chutao2">Chutão (-10%)</label><br>
+            <label for="faltas2">Faltas (-0,5% cada):</label> <input type="number" id="faltas2" min="0" onchange="atualizarTermometro(2)"><br>
+            <input type="checkbox" id="pressao2" onchange="atualizarTermometro(2)"> <label for="pressao2">Pressão (+10%)</label><br>
+            <input type="checkbox" id="qualidade-jogo2" onchange="atualizarTermometro(2)"> <label for="qualidade-jogo2">Qualidade do Jogo (+10%)</label><br>
+            <input type="checkbox" id="cera2" onchange="atualizarTermometro(2)"> <label for="cera2">Cera (-15%)</label><br>
+            <label for="faltas-violentas2">Faltas Violentas (-2% cada):</label> <input type="number" id="faltas-violentas2" min="0" onchange="atualizarTermometro(2)"><br>
+            <label for="finalizacoes-perigosas2">Finalizações Perigosas (+8% cada):</label> <input type="number" id="finalizacoes-perigosas2" min="0" onchange="atualizarTermometro(2)"><br>
+            <label for="finalizacoes-ruins2">Finalizações Ruins (+0,5% cada):</label> <input type="number" id="finalizacoes-ruins2" min="0" onchange="atualizarTermometro(2)"><br>
+            <label for="finalizacoes-normais2">Finalizações Normais (+1% cada):</label> <input type="number" id="finalizacoes-normais2" min="0" onchange="atualizarTermometro(2)"><br>
+        </form>
+
+        <div class="termometro" id="termometro2">
+            <div class="nivel" style="height: 0;"></div>
+        </div>
+        <div class="porcentagem" id="porcentagem2">0%</div>
+    </div>
+</div>
+
+<script>
+    function atualizarTermometro(numTermometro) {
+        var termometro;
+        var porcentagem;
+
+        if (numTermometro === 1) {
+            termometro = document.getElementById("termometro1");
+            porcentagem = document.getElementById("porcentagem1");
+        } else if (numTermometro === 2) {
+            termometro = document.getElementById("termometro2");
+            porcentagem = document.getElementById("porcentagem2");
+        }
+
+        var nivel = termometro.querySelector(".nivel");
+        var valor = 0;
+
+        if (document.getElementById("posse-bola" + numTermometro).checked) {
+            valor += 25;
+        }
+        if (document.getElementById("chutao" + numTermometro).checked) {
+            valor -= 10;
+        }
+        valor -= parseInt(document.getElementById("faltas" + numTermometro).value || 0) * 0.5;
+        if (document.getElementById("pressao" + numTermometro).checked) {
+            valor += 10;
+        }
+        if (document.getElementById("qualidade-jogo" + numTermometro).checked) {
+            valor += 10;
+        }
+        if (document.getElementById("cera" + numTermometro).checked) {
+            valor -= 15;
+        }
+        valor -= parseInt(document.getElementById("faltas-violentas" + numTermometro).value || 0) * 2;
+        valor += parseInt(document.getElementById("finalizacoes-perigosas" + numTermometro).value || 0) * 8;
+        valor += parseInt(document.getElementById("finalizacoes-ruins" + numTermometro).value || 0) * 0.5;
+        valor += parseInt(document.getElementById("finalizacoes-normais" + numTermometro).value || 0);
+
+        if (valor < 0) {
+            valor = 0;
+        } else if (valor > 100) {
+            valor = 100;
+        }
+
+        nivel.style.height = valor + "%";
+        porcentagem.textContent = valor + "%";
+    }
+</script>
+
+</body>
+</html>
